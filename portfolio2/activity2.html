@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2 - About Me Toggle</title>
+  <style>
+    /* Reset & Body */
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+      color: #222;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body.dark-mode {
+      background-color: #181818;
+      color: #f1f1f1;
+    }
+
+    /* Profile Container */
+    .profile-container {
+      text-align: center;
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-container.dark-mode {
+      background: #3a3a3a; /* lighter dark gray for readability */
+      color: #f1f1f1;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    .profile-container.dark-mode h2,
+    .profile-container.dark-mode p {
+      color: #f1f1f1;
+    }
+
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid yellowgreen;
+      margin-bottom: 15px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-pic:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px yellowgreen;
+    }
+
+    h2 {
+      margin: 10px 0 5px 0;
+    }
+
+    p {
+      margin: 5px 0 20px 0;
+    }
+
+    /* About Me toggle */
+    #aboutText {
+      font-size: 1rem;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    #aboutText.show {
+      opacity: 1;
+      max-height: 100px;
+    }
+
+    #toggleBtn {
+      background: yellowgreen;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      color: black;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    #toggleBtn:hover {
+      background: limegreen;
+      transform: scale(1.05);
+    }
+
+    /* Back button in upper-left corner */
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      background: hsl(43, 15%, 62%);
+      color: black;
+      z-index: 3;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: limegreen;
+      transform: scale(1.05);
+    }
+
+    /* Flying objects */
+    .fly-object {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: yellowgreen;
+      opacity: 0.7;
+      pointer-events: none;
+      animation: float 6s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-200px) rotate(180deg); }
+      100% { transform: translateY(0) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Back button -->
+  <button class="back-btn" onclick="goBack()">⬅ Back</button>
+
+  <!-- Profile Container -->
+  <div class="profile-container">
+    <img src="samal.jpeg" alt="Profile Picture" class="profile-pic">
+    <h2>Eric Gonato</h2>
+    <p>I'm a Web Developer</p>
+
+    <button id="toggleBtn">About Me</button>
+    <p id="aboutText">I'm a programmer and it runs in my blood.</p>
+  </div>
+
+  <script>
+    // About Me toggle
+    const toggleBtn = document.getElementById('toggleBtn');
+    const aboutText = document.getElementById('aboutText');
+
+    toggleBtn.addEventListener('click', () => {
+      aboutText.classList.toggle('show');
+      toggleBtn.textContent = aboutText.classList.contains('show') ? 'Show Less' : 'About Me';
+    });
+
+    // Apply dark mode
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark-mode");
+      document.querySelector('.profile-container').classList.add("dark-mode");
+    }
+
+    // Back button function
+    function goBack() {
+      window.location.href = "index.html";
+    }
+
+    // Create flying objects
+    function createFlyingObjects(num) {
+      for (let i = 0; i < num; i++) {
+        const obj = document.createElement('div');
+        obj.classList.add('fly-object');
+        obj.style.left = Math.random() * window.innerWidth + 'px';
+        obj.style.top = Math.random() * window.innerHeight + 'px';
+        obj.style.width = obj.style.height = (Math.random() * 10 + 5) + 'px';
+        obj.style.backgroundColor = `hsl(${Math.random() * 120 + 100}, 70%, 50%)`; // greenish
+        obj.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        document.body.appendChild(obj);
+      }
+    }
+
+    createFlyingObjects(30); // number of flying objects
+
+    
+ 
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 1 - Hover Profile</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+      color: #222;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    body.dark-mode {
+      background-color: #181818;
+      color: #f1f1f1;
+    }
+
+    .profile-container {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-pic {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-pic:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px yellowgreen;
+    }
+
+    .info {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      visibility: hidden;
+    }
+
+    .show-info {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    /* Back Button */
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      background: rgb(139, 133, 120);
+      color: black;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .back-btn:hover {
+      background: rgb(163, 156, 126);
+      transform: scale(1.05);
+    }
+
+    /* Fireworks container */
+    .fireworks {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 1;
+    }
+
+    .particle, .text-particle {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      animation: explode 2s forwards; /* Slower animation */
+    }
+
+    .particle {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .text-particle {
+      font-weight: bold;
+      font-size: 16px;
+      color: yellowgreen;
+      white-space: nowrap;
+    }
+
+    @keyframes explode {
+      0% { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0); }
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="goBack()">⬅ Back</button>
+
+  <div class="profile-container">
+    <img src="black.jpeg" alt="Profile Picture" class="profile-pic" id="profilePic">
+    <p id="infoText" class="info">Hi! I’m Eric, I Love You So Much!</p>
+  </div>
+
+  <div class="fireworks" id="fireworks"></div>
+
+  <script>
+    const profilePic = document.getElementById('profilePic');
+    const infoText = document.getElementById('infoText');
+    const fireworksContainer = document.getElementById('fireworks');
+
+    profilePic.addEventListener('mouseover', () => {
+      infoText.classList.add('show-info');
+      startFireworks();
+    });
+
+    profilePic.addEventListener('mouseout', () => {
+      infoText.classList.remove('show-info');
+      stopFireworks();
+    });
+
+    let fireworkInterval;
+
+    function startFireworks() {
+      fireworkInterval = setInterval(() => {
+        for(let i = 0; i < 5; i++){
+          // Color particles
+          const particle = document.createElement('div');
+          particle.classList.add('particle');
+
+          const startX = Math.random() * window.innerWidth;
+          const startY = Math.random() * window.innerHeight;
+
+          particle.style.left = startX + 'px';
+          particle.style.top = startY + 'px';
+
+          const angle = Math.random() * 2 * Math.PI;
+          const distance = Math.random() * 200 + 50;
+          particle.style.setProperty('--x', `${Math.cos(angle)*distance}px`);
+          particle.style.setProperty('--y', `${Math.sin(angle)*distance}px`);
+          particle.style.backgroundColor = `hsl(${Math.random()*360}, 80%, 50%)`;
+
+          fireworksContainer.appendChild(particle);
+          setTimeout(() => particle.remove(), 2000); // match animation duration
+
+          // Text particles
+          const textParticle = document.createElement('div');
+          textParticle.classList.add('text-particle');
+          textParticle.innerText = "HI! I’M ERIC, I LOVE YOU SO MUCH!";
+
+          const textX = Math.random() * window.innerWidth;
+          const textY = Math.random() * window.innerHeight;
+
+          textParticle.style.left = textX + 'px';
+          textParticle.style.top = textY + 'px';
+
+          const textAngle = Math.random() * 2 * Math.PI;
+          const textDistance = Math.random() * 120 + 50;
+          textParticle.style.setProperty('--x', `${Math.cos(textAngle)*textDistance}px`);
+          textParticle.style.setProperty('--y', `${Math.sin(textAngle)*textDistance}px`);
+
+          fireworksContainer.appendChild(textParticle);
+          setTimeout(() => textParticle.remove(), 2000); // match animation duration
+        }
+      }, 400); // slower intervals for readability
+    }
+
+    function stopFireworks() {
+      clearInterval(fireworkInterval);
+    }
+
+    // Apply saved theme from localStorage
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark-mode");
+    }
+
+    function goBack() {
+      window.location.href = "index.html"; // Change to your homepage filename if different
+    }
+
+
+
+  </script>
+</body>
+</html>
